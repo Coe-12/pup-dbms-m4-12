@@ -3,42 +3,39 @@ $(function(){
 		var data = $(event.target).serializeArray();
 		var thesis = {};
 
-		for(var i = 0; i<data.length ; i++)
-		{
+		for(var i = 0; i<data.length ; i++){
 			thesis[data[i].name] = data[i].value;
 		}
 
 		var thesis_create_api = '/api/thesis';
 
-		$.post(thesis_create_api, thesis);/*, function(response){
+		$.post(thesis_create_api, thesis, function(response){
 			// read response from server
 			if (response.status = 'OK') {
-				var thesis_list = response.data.section + ' ' + response.data.thesisTitle;
-				$('.thesis-list').prepend('<li>' + thesis_list + '</li>')
-				//$('input[type=text], [type=number]').val('');
+				var thesis_list = response.data.year + ' ' + response.data.thesisTitle + ' created by: ' + response.data.userName;
+				$('.thesis-list').prepend('<li>' + thesis_list + '<a href=\"/thesis/delete/'+response.data.id+'\"><button type=\"submit\">DELETE</button></a>')
+				$('input:text').val('');
+				$('textarea[name=abstract]').val('');
+				$('select[name=year]').val('2011');
+				$('select[name=section]').val('1');
 			} else {
 
 			}
-		});*/
+		});
 
-		var list_element = $('<li>');
-		list_element.html(thesis.year + ' ' + thesis.thesisTitle);
-		$('.thesis-list').prepend(list_element);
-		$('input:text').val('');
-		$('input[type=number]').val('');
 		return false;
 	}
-/*
+
 	function loadThesis(){
 		var thesis_list_api = '/api/thesis';
 		$.get(thesis_list_api, {} , function(response) {
 			console.log('.thesis-list', response)
 			response.data.forEach(function(thesis){
-				var thesis_list = response.data.year + ' ' + response.data.thesisTitle;
-				$('.thesis-list').append('<li>' + thesis_list + '</li>')
+				var thesis_list = thesis.year + ' ' + thesis.thesisTitle + ' created by: ' + thesis.userName;;
+				$('.thesis-list').append('<li>' + thesis_list + '<a href=\"/thesis/delete/'+thesis.id+'\"><button type=\"submit\">DELETE</button></a>' + '</li>')
 			});
 		});
-	}*/
-    $('.create-form').submit(onFormSubmit)
-    //loadThesis();
+	}
+	loadThesis();
+    $('.create-form').submit(onFormSubmit);
 });
